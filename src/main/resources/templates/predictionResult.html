@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediction Result</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+    <h1 class="mt-5">Prediction Result</h1>
+
+    <div class="bg-white p-4 rounded shadow-sm">
+        <h4>Prediction Details</h4>
+        <ul class="list-group">
+            <li class="list-group-item">
+                <strong>Seed Type:</strong> <span th:text="${predictionResponse.seed}"></span>
+            </li>
+            <li class="list-group-item">
+                <strong>Land Surface:</strong> <span th:text="${predictionResponse.landSurface}"></span> m²
+            </li>
+            <li class="list-group-item">
+                <strong>Water Depth:</strong> <span th:text="${predictionResponse.waterDepth}"></span> m
+            </li>
+            <li class="list-group-item">
+                <strong>Water Traveling Distance:</strong> <span th:text="${predictionResponse.waterTravelingDistance}"></span> m
+            </li>
+            <li class="list-group-item">
+                <strong>Required Kilowatts:</strong> <span th:text="${predictionResponse.kilowatts}"></span> kW
+            </li>
+            <li class="list-group-item">
+                <strong>Number of Panels:</strong> <span th:text="${predictionResponse.panels}"></span>
+            </li>
+            <li class="list-group-item">
+                <strong>Total Surface Area:</strong> <span th:text="${predictionResponse.surfaceArea}"></span> m²
+            </li>
+            <li class="list-group-item">
+                <strong>Estimated Cost:</strong> <span th:text="${predictionResponse.cost}"></span> MAD
+            </li>
+        </ul>
+
+        <h4 class="mt-4">Explanation</h4>
+        <p th:text="${predictionResponse.explanation}"></p>
+
+        <a th:href="@{/predictions(username=${predictionResponse.username})}" class="btn btn-secondary mt-3">Go Back to Predictions</a>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
