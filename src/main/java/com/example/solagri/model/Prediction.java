@@ -1,8 +1,9 @@
 package com.example.solagri.model;
 
-
-
 import jakarta.persistence.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "predictions")
@@ -27,7 +28,29 @@ public class Prediction {
     @JoinColumn(name = "user_id")
     private User user;
 
-    // Constructors, Getters, Setters
+    @OneToOne(mappedBy = "prediction", cascade = CascadeType.ALL, orphanRemoval = true)
+    private AdvancedPrediction advancedPrediction;
+    @OneToMany(mappedBy = "prediction", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Feedback> feedbacks = new ArrayList<>();
+
+    public List<Feedback> getFeedbacks() {
+        return feedbacks;
+    }
+
+    public void setFeedbacks(List<Feedback> feedbacks) {
+        this.feedbacks = feedbacks;
+    }
+
+    public void addFeedback(Feedback feedback) {
+        feedbacks.add(feedback);
+        feedback.setPrediction(this);
+    }
+
+    public void removeFeedback(Feedback feedback) {
+        feedbacks.remove(feedback);
+        feedback.setPrediction(null);
+    }
+    // Constructors
     public Prediction() {}
 
     public Prediction(String seed, double landSurface, double waterDepth, double waterTravelingDistance,
@@ -77,4 +100,7 @@ public class Prediction {
 
     public User getUser() { return user; }
     public void setUser(User user) { this.user = user; }
+
+    public AdvancedPrediction getAdvancedPrediction() { return advancedPrediction; }
+    public void setAdvancedPrediction(AdvancedPrediction advancedPrediction) { this.advancedPrediction = advancedPrediction; }
 }

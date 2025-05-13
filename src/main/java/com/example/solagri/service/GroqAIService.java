@@ -31,7 +31,7 @@ public class GroqAIService {
         this.seedWaterRequirementRepository = seedWaterRequirementRepository;
     }
 
-    public PredictionExplanationResponse predictSolarPanels(PredictionInput input) {
+    public PredictionExplanationResponse predictSolarPanels(PredictionInput input, String soilType) {
         String url = "https://api.groq.com/openai/v1/chat/completions";
 
         HttpHeaders headers = new HttpHeaders();
@@ -40,7 +40,8 @@ public class GroqAIService {
 
         // Log input for debugging
         System.out.println("Input: seed=" + input.getSeed() + ", landSurface=" + input.getLandSurface() +
-                ", waterDepth=" + input.getWaterDepth() + ", waterTravelingDistance=" + input.getWaterTravelingDistance());
+                ", waterDepth=" + input.getWaterDepth() + ", waterTravelingDistance=" + input.getWaterTravelingDistance() +
+                ", soilType=" + (soilType != null ? soilType : "none"));
 
         // Query water requirement from database
         Optional<SeedWaterRequirement> seedRequirement = seedWaterRequirementRepository.findBySeedType(input.getSeed());
@@ -52,9 +53,14 @@ public class GroqAIService {
             System.err.println("⚠️ Seed type '" + input.getSeed() + "' not found in database. Using default water_per_m2: 500.0");
         }
 
+        // Adjust water requirement based on soil type
+        double soilMultiplier = getSoilMultiplier(soilType);
+        waterPerM2 *= soilMultiplier;
+
         String prompt = String.format(
-                "Seed type: %s\nLand surface: %.2f m²\nWater depth: %.2f m\nDistance water travels: %.2f m\nWater requirement: %.2f L/m²",
-                input.getSeed(), input.getLandSurface(), input.getWaterDepth(), input.getWaterTravelingDistance(), waterPerM2
+                "Seed type: %s\nLand surface: %.2f m²\nWater depth: %.2f m\nDistance water travels: %.2f m\nWater requirement: %.2f L/m²\nSoil type: %s",
+                input.getSeed(), input.getLandSurface(), input.getWaterDepth(), input.getWaterTravelingDistance(), waterPerM2,
+                soilType != null ? soilType : "unknown"
         );
 
         Map<String, Object> requestBody = new HashMap<>();
@@ -71,7 +77,7 @@ public class GroqAIService {
                     3. Solar panels: panels = ceil(power_kW / 0.3).
                     4. Surface area (m²): surface_area = panels * 2.
                     5. Cost (MAD): cost = panels * 5000.
-                    Input: Seed type: %s, Land surface: %.2f m², Water depth: %.2f m, Distance water travels: %.2f m, Water requirement: %.2f L/m².
+                    Input: Seed type: %s, Land surface: %.2f m², Water depth: %.2f m, Distance water travels: %.2f m, Water requirement: %.2f L/m², Soil type: %s.
                     Output ONLY valid JSON:
                     {
                       "kilowatts": double,
@@ -81,9 +87,9 @@ public class GroqAIService {
                       "explanation": string
                     }
                     The explanation must be a 500-word string with no unescaped control characters (use \\n for newlines, \\t for tabs).
-                    Include the water_liters value in the explanation. Round numbers to 2 decimal places.
+                    Include the water_liters value and soil type impact in the explanation. Round numbers to 2 decimal places.
                     Ensure JSON is strictly valid and parseable.
-                """.formatted(input.getSeed(), input.getLandSurface(), input.getWaterDepth(), input.getWaterTravelingDistance(), waterPerM2)),
+                """.formatted(input.getSeed(), input.getLandSurface(), input.getWaterDepth(), input.getWaterTravelingDistance(), waterPerM2, soilType != null ? soilType : "unknown")),
                 Map.of("role", "user", "content", prompt)
         ));
 
@@ -107,6 +113,16 @@ public class GroqAIService {
         }
 
         return new PredictionExplanationResponse("Failed to retrieve prediction due to API error", 0, 0, 0, 0);
+    }
+
+    private double getSoilMultiplier(String soilType) {
+        if (soilType == null) return 1.0;
+        return switch (soilType.toLowerCase()) {
+            case "sandy" -> 1.2; // Sandy soil retains less water, needs more
+            case "clay" -> 0.8;  // Clay soil retains more water, needs less
+            case "loam" -> 1.0;  // Loam is balanced
+            default -> 1.0;      // Default for unknown types
+        };
     }
 
     private PredictionExplanationResponse parsePredictionExplanation(String content) throws IOException {

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feedback</title>
+    <link href="/css/style.css" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+    <h2>Feedback for Prediction</h2>
+
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Feedback Message</th>
+            <th>Rating</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- Loop through feedbacks -->
+        <tr th:each="feedback : ${feedbacks}">
+            <td th:text="${feedback.id}">1</td>
+            <td th:text="${feedback.feedbackMessage}">Excellent work!</td>
+            <td th:text="${feedback.rating}">5.0</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <!-- Back button -->
+    <a th:href="@{/predictions}" class="btn btn-secondary">Back to Predictions</a>
+</div>
+</body>
+</html>

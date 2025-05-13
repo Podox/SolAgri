@@ -31,6 +31,15 @@
             <input type="number" id="waterTravelingDistance" th:field="*{waterTravelingDistance}" step="0.1" class="form-control" required>
             <div th:if="${#fields.hasErrors('waterTravelingDistance')}" th:errors="*{waterTravelingDistance}" class="text-danger"></div>
         </div>
+        <div class="mb-3">
+            <label for="soilType" class="form-label">Soil Type (Optional)</label>
+            <select id="soilType" name="soilType" class="form-control">
+                <option value="">Select Soil Type</option>
+                <option value="sandy">Sandy</option>
+                <option value="clay">Clay</option>
+                <option value="loam">Loam</option>
+            </select>
+        </div>
         <button type="submit" class="btn btn-primary">Predict</button>
     </form>
 
