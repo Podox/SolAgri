@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Tickets - Admin</title>
+    <link href="/css/style.css" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+    <h1>All Support Tickets</h1>
+
+    <!-- Tickets Table -->
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Subject</th>
+            <th>Description</th>
+            <th>Status</th>
+            <th>Created At</th>
+            <th>User</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- Loop through all tickets -->
+        <tr th:each="ticket : ${tickets}">
+            <td th:text="${ticket.id}"></td>
+            <td th:text="${ticket.subject}"></td>
+            <td th:text="${ticket.description}"></td>
+            <td th:text="${ticket.status}"></td>
+            <td th:text="${ticket.createdAt}"></td>
+            <td th:text="${ticket.user.username}"></td>
+            <td>
+                <form th:action="@{/support/admin/update-status}" method="post" style="display: inline;">
+                    <input type="hidden" name="ticketId" th:value="${ticket.id}">
+                    <select name="status">
+                        <option value="OPEN" th:selected="${ticket.status == 'OPEN'}">OPEN</option>
+                        <option value="IN_PROGRESS" th:selected="${ticket.status == 'IN_PROGRESS'}">IN PROGRESS</option>
+                        <option value="RESOLVED" th:selected="${ticket.status == 'RESOLVED'}">RESOLVED</option>
+                    </select>
+                    <button type="submit" class="btn btn-primary btn-sm">Update</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <!-- Back Button -->
+    <a th:href="@{/support}" class="btn btn-secondary">Back to Support</a>
+</div>
+</body>
+</html>

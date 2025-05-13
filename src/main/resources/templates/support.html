@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Support</title>
+    <link href="/css/style.css" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+    <h1>Support Center</h1>
+
+    <!-- Ticket submission form -->
+    <h2>Submit a New Ticket</h2>
+    <form th:action="@{/support/create}" th:object="${newTicket}" method="post">
+        <div>
+            <label for="subject">Subject</label>
+            <input type="text" id="subject" name="subject" th:field="*{subject}" required>
+        </div>
+        <div>
+            <label for="description">Description</label>
+            <textarea id="description" name="description" th:field="*{description}" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit Ticket</button>
+    </form>
+
+    <!-- List of tickets -->
+    <h2>Your Tickets</h2>
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Subject</th>
+            <th>Status</th>
+            <th>Created At</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="ticket : ${tickets}">
+            <td th:text="${ticket.id}"></td>
+            <td th:text="${ticket.subject}"></td>
+            <td th:text="${ticket.status}"></td>
+            <td th:text="${ticket.createdAt}"></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <a th:href="@{/predictions}" class="btn btn-secondary">Back to Predictions</a>
+</div>
+</body>
+</html>
