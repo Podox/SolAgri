@@ -40,5 +40,25 @@ public class LoginController {
     @Autowired
     private FeedbackRepository FeedbackRepository;
 
+    @GetMapping("/logout")
+    public String logout(HttpSession session) {
+        session.invalidate();
+        return "redirect:/login";
+    }
 
+    @GetMapping("/login")
+    public String showLoginPage() {
+        return "login"; // Maps to login.html
+    }
+
+    @PostMapping("/login")
+    public String handleLogin(@RequestParam String username, @RequestParam String password, Model model, HttpSession session) {
+        User user = userRepository.findByUsername(username);
+        if (user == null || !user.getPassword().equals(password)) {
+            model.addAttribute("error", "Invalid username or password");
+            return "login";
+        }
+        session.setAttribute("user", user);
+        return "redirect:/predict";
+    }
 }
