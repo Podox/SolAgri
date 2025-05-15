@@ -1,0 +1,16 @@
+<div class="register-container">
+  <h2>Register</h2>
+  <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+    <label>Username</label>
+    <input type="text" formControlName="username" />
+    <label>Email</label>
+    <input type="email" formControlName="email" />
+    <label>Password</label>
+    <input type="password" formControlName="password" />
+    <button type="submit" [disabled]="loading">Register</button>
+
+    <div *ngIf="error" class="error-message">
+      {{ error }}
+    </div>
+  </form>
+</div>

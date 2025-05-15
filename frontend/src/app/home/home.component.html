@@ -1,0 +1,12 @@
+<div class="home-container">
+  <h1>Welcome to the Home Page</h1>
+
+  <nav>
+    <button *ngIf="loggedIn" (click)="logout()">Logout</button>
+    <a *ngIf="!loggedIn" routerLink="/login">Login</a>
+    <a *ngIf="!loggedIn" routerLink="/register">Register</a>
+    <a *ngIf="loggedIn" routerLink="/predictions">predictions</a>
+  </nav>
+
+
+</div>

@@ -9,8 +9,8 @@
     <p th:text="${error}"></p>
 </div>
 <form th:action="@{/login}" method="post">
-    <label>Username:</label>
-    <input type="text" name="username" required><br>
+    <label>Email or Username:</label>
+    <input type="text" name="usernameOrEmail" required><br>
     <label>Password:</label>
     <input type="password" name="password" required><br>
     <button type="submit">Login</button>

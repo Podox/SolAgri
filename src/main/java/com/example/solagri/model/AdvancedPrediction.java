@@ -1,5 +1,6 @@
 package com.example.solagri.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 @Entity
@@ -15,6 +16,7 @@ public class AdvancedPrediction {
 
     @OneToOne
     @JoinColumn(name = "prediction_id", nullable = false)
+    @JsonBackReference
     private Prediction prediction;
 
     // Constructors

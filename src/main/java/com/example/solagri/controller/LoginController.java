@@ -1,64 +1,70 @@
 package com.example.solagri.controller;
 
-import com.example.solagri.dto.AdvancedPredictionInput;
-import com.example.solagri.dto.PredictionInput;
-import com.example.solagri.dto.PredictionExplanationResponse;
-import com.example.solagri.model.AdvancedPrediction;
-import com.example.solagri.model.Feedback;
-import com.example.solagri.model.Prediction;
+import com.example.solagri.dto.UserDTO;
 import com.example.solagri.model.User;
-import com.example.solagri.repository.AdvancedPredictionRepository;
-import com.example.solagri.repository.FeedbackRepository;
-import com.example.solagri.repository.PredictionRepository;
 import com.example.solagri.repository.UserRepository;
-import com.example.solagri.service.GroqAIService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.util.UriComponentsBuilder;
-
+import org.springframework.web.bind.annotation.*;
 import jakarta.servlet.http.HttpSession;
-import java.util.List;
 
-@Controller
+import java.util.Map;
+
+@RestController
+@RequestMapping("/api/auth")
 public class LoginController {
-    @Autowired
-    private PredictionRepository predictionRepository;
-
-    @Autowired
-    private AdvancedPredictionRepository advancedPredictionRepository;
-
-    @Autowired
-    private GroqAIService groqAIService;
 
     @Autowired
     private UserRepository userRepository;
-    @Autowired
-    private FeedbackRepository FeedbackRepository;
-
-    @GetMapping("/logout")
-    public String logout(HttpSession session) {
-        session.invalidate();
-        return "redirect:/login";
-    }
-
-    @GetMapping("/login")
-    public String showLoginPage() {
-        return "login"; // Maps to login.html
-    }
 
     @PostMapping("/login")
-    public String handleLogin(@RequestParam String username, @RequestParam String password, Model model, HttpSession session) {
-        User user = userRepository.findByUsername(username);
-        if (user == null || !user.getPassword().equals(password)) {
-            model.addAttribute("error", "Invalid username or password");
-            return "login";
+    public ResponseEntity<?> handleLogin(@RequestBody Map<String, String> loginData, HttpSession session) {
+        String usernameOrEmail = loginData.get("email");
+        String password = loginData.get("password");
+
+        User user;
+        if (usernameOrEmail.contains("@")) {
+            user = userRepository.findByEmail(usernameOrEmail);
+        } else {
+            user = userRepository.findByUsername(usernameOrEmail);
         }
+
+        if (user == null || !user.getPassword().equals(password)) {
+
+            System.err.println("Login unsuccessful");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(Map.of("error", "Invalid email/username or password"));
+        }
+
         session.setAttribute("user", user);
-        return "redirect:/predict";
+
+        UserDTO userDTO = new UserDTO(user.getId(), user.getUsername(), user.getEmail());
+        System.err.println("Login successful");
+        return ResponseEntity.ok(Map.of("message", "Login successful", "user", userDTO));
     }
+
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(HttpSession session) {
+        session.invalidate();
+        return ResponseEntity.ok(Map.of("message", "Logged out"));
+    }
+    @PostMapping("/register")
+    public ResponseEntity<?> register(@RequestBody Map<String, String> data) {
+        String username = data.get("username");
+        String email = data.get("email");
+        String password = data.get("password");
+
+        if (userRepository.findByUsername(username) != null || userRepository.findByEmail(email) != null) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of("error", "Username or email already exists"));
+        }
+
+        User user = new User(username, password, email);
+        userRepository.save(user);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("message", "Registration successful"));
+    }
+
 }

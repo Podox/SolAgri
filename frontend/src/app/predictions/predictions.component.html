@@ -1,0 +1,50 @@
+<div class="container mt-5">
+  <h2>Your Predictions</h2>
+
+  <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+
+  <div *ngIf="loading">Loading...</div>
+
+  <div *ngIf="!loading && predictions.length > 0">
+    <table class="table table-bordered table-striped">
+      <thead>
+      <tr>
+        <th>Seed</th>
+        <th>Land Surface</th>
+        <th>Water Depth</th>
+        <th>Water Distance</th>
+        <th>Soil Type</th>
+        <th>Kilowatts</th>
+        <th>Panels</th>
+        <th>Surface Area</th>
+        <th>Cost (MAD)</th>
+        <th>Explanation</th>
+        <th>Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let p of predictions">
+        <td>{{ p.seed }}</td>
+        <td>{{ p.landSurface }}</td>
+        <td>{{ p.waterDepth }}</td>
+        <td>{{ p.waterTravelingDistance }}</td>
+        <td>{{ p.advancedPrediction?.soilType || 'N/A' }}</td>
+        <td>{{ p.kilowatts }}</td>
+        <td>{{ p.panels }}</td>
+        <td>{{ p.surfaceArea }}</td>
+        <td>{{ p.cost }}</td>
+        <td>{{ p.explanation }}</td>
+        <td>
+          <a [routerLink]="['/advanced-predict']" [queryParams]="{ predictionId: p.id }" class="btn btn-sm btn-info">Update with Soil</a>
+          <a [routerLink]="['/feedback/add']" [queryParams]="{ id: p.id }" class="btn btn-sm btn-success">Add Feedback</a>
+          <a [routerLink]="['/feedback', p.id]" class="btn btn-sm btn-primary">View Feedback</a>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="!loading && predictions.length === 0">
+    <p>No predictions found. <a routerLink="/predict">Make your first prediction</a>.</p>
+  </div>
+</div>

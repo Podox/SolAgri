@@ -1,5 +1,8 @@
 package com.example.solagri.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -26,11 +29,14 @@ public class Prediction {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
+    @JsonBackReference
     private User user;
 
     @OneToOne(mappedBy = "prediction", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private AdvancedPrediction advancedPrediction;
     @OneToMany(mappedBy = "prediction", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<Feedback> feedbacks = new ArrayList<>();
 
     public List<Feedback> getFeedbacks() {
