@@ -1,0 +1,39 @@
+<div class="container mt-4">
+  <h2>Admin Ticket Management</h2>
+
+  <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+
+  <table class="table table-bordered" *ngIf="tickets.length > 0">
+    <thead>
+    <tr>
+      <th>ID</th>
+      <th>User</th>
+      <th>Subject</th>
+      <th>Status</th>
+      <th>Created</th>
+      <th>Updated</th>
+      <th>Change Status</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let t of tickets">
+      <td>{{ t.id }}</td>
+      <td>{{ t.user.username }}</td>
+      <td>{{ t.subject }}</td>
+      <td>{{ t.status }}</td>
+      <td>{{ t.createdAt | date:'short' }}</td>
+      <td>{{ t.updatedAt | date:'short' }}</td>
+      <td>
+        <select #statusSelect (change)="updateStatus(t.id, statusSelect.value)" [value]="t.status" class="form-select">
+          <option value="OPEN">OPEN</option>
+          <option value="IN_PROGRESS">IN_PROGRESS</option>
+          <option value="RESOLVED">RESOLVED</option>
+        </select>
+
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
+  <p *ngIf="tickets.length === 0">No tickets found.</p>
+</div>

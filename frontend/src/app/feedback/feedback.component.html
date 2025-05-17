@@ -1,0 +1,26 @@
+<div class="container mt-4">
+  <h2>Add Feedback</h2>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="mb-4">
+    <div class="mb-3">
+      <label for="feedbackMessage" class="form-label">Feedback Message</label>
+      <textarea id="feedbackMessage" class="form-control" formControlName="feedbackMessage" required></textarea>
+    </div>
+
+    <div class="mb-3">
+      <label for="rating" class="form-label">Rating (1-5)</label>
+      <input type="number" id="rating" class="form-control" formControlName="rating" min="1" max="5" required>
+    </div>
+
+    <button class="btn btn-primary" type="submit" [disabled]="form.invalid">Submit</button>
+  </form>
+
+  <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+
+  <h3>Previous Feedback</h3>
+  <ul class="list-group">
+    <li *ngFor="let fb of feedbacks" class="list-group-item">
+      <strong>{{ fb.rating }}/5</strong> - {{ fb.feedbackMessage }}
+    </li>
+  </ul>
+</div>

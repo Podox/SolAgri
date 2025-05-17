@@ -1,0 +1,41 @@
+<div class="container mt-4">
+  <h2>Support Tickets</h2>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="mb-4">
+    <div class="mb-3">
+      <label class="form-label">Subject</label>
+      <input class="form-control" formControlName="subject" required />
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Description</label>
+      <textarea class="form-control" formControlName="description" required></textarea>
+    </div>
+    <button class="btn btn-primary" [disabled]="form.invalid">Submit Ticket</button>
+  </form>
+
+  <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+
+  <h4>My Tickets</h4>
+  <table class="table table-striped" *ngIf="tickets.length > 0">
+    <thead>
+    <tr>
+      <th>ID</th>
+      <th>Subject</th>
+      <th>Status</th>
+      <th>Created</th>
+      <th>Updated</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let t of tickets">
+      <td>{{ t.id }}</td>
+      <td>{{ t.subject }}</td>
+      <td>{{ t.status }}</td>
+      <td>{{ t.createdAt | date:'short' }}</td>
+      <td>{{ t.updatedAt | date:'short' }}</td>
+    </tr>
+    </tbody>
+  </table>
+
+  <p *ngIf="tickets.length === 0">No support tickets yet.</p>
+</div>
