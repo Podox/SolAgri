@@ -78,23 +78,37 @@
           <a href="/support" class="text-sm font-medium text-gray-700 hover:text-green-600 transition-colors">
             Support
           </a>
+          <a
+            *ngIf="isAdmin"
+            href="support/admin-support"
+            class="text-sm font-medium text-gray-700 hover:text-green-600 transition-colors"
+          >
+            adminSupport
+          </a>
 
-          <!-- Login/Register buttons for logged out users -->
           <div class="flex items-center gap-2">
-            <a href="/login" class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 px-4 py-2">
-              Login
-            </a>
-            <a href="/register" class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-green-600 hover:bg-green-700 text-white h-9 px-4 py-2">
-              Register
-            </a>
-          </div>
+            <!-- Show Login/Register if not logged in -->
+            <ng-container *ngIf="!loggedIn; else loggedInBlock">
+              <a routerLink="/login"
+                 class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 px-4 py-2">
+                Login
+              </a>
+              <a routerLink="/register"
+                 class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-green-600 hover:bg-green-700 text-white h-9 px-4 py-2">
+                Register
+              </a>
+            </ng-container>
 
-          <!-- Demo controls - would be removed in production -->
-          <div class="flex items-center gap-2 border-l pl-4">
-            <button class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 px-4 py-2">
-              Demo: Login
-            </button>
+            <!-- Show Logout if logged in -->
+            <ng-template #loggedInBlock>
+              <button (click)="logout()"
+                      class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-red-600 hover:bg-red-700 text-white h-9 px-4 py-2">
+                Logout
+              </button>
+            </ng-template>
           </div>
+          <!-- Demo controls - would be removed in production -->
+
         </nav>
 
         <!-- Mobile Menu Button -->
@@ -123,17 +137,16 @@
             impact with our advanced prediction tools.
           </p>
           <div class="flex flex-wrap gap-4">
-            <a href="/prediction" class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-green-600 hover:bg-green-700 text-white h-11 px-8">
+            <a (click)="handleGetStarted()"
+               class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-green-600 hover:bg-green-700 text-white h-11 px-8">
               Get Started
             </a>
-            <a href="/about" class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-green-600 text-green-600 hover:bg-green-50 h-11 px-8">
-              Learn More
-            </a>
+
           </div>
         </div>
         <div class="flex justify-center">
           <img
-            src="/placeholder.svg?height=400&width=500"
+            src="../assets/images/solar-farm.svg?height=400&width=500"
             alt="Solar Panels in Agricultural Field"
             width="500"
             height="400"
@@ -316,13 +329,7 @@
       });
     }
 
-    // Demo login button functionality
-    const demoLoginButtons = document.querySelectorAll('button:contains("Demo: Login")');
-    demoLoginButtons.forEach(button => {
-      button.addEventListener('click', function() {
-        alert('This is a demo login button. In a real application, this would toggle the login state.');
-      });
-    });
+
   });
 </script>
 </body>

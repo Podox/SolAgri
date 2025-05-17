@@ -13,6 +13,7 @@ import { AuthService } from '../services/auth.service';
 export class HomeComponent {
   loggedIn = false;
   username: string | null = null;
+  isAdmin = false;
 
   constructor(private authService: AuthService, private router: Router) {}
 
@@ -22,6 +23,7 @@ export class HomeComponent {
     if (this.loggedIn) {
       const user = this.authService.getUser();
       this.username = user?.username ?? null;
+      this.isAdmin = this.username === 'admin';
     }
   }
 
@@ -31,15 +33,23 @@ export class HomeComponent {
         localStorage.removeItem('user');
         this.loggedIn = false;
         this.username = null;
-        this.router.navigate(['/login']);
+        this.isAdmin = false;
+        this.router.navigate(['/']);
       },
-      error: (err) => {
-        console.error('Logout error:', err);
+      error: () => {
         this.loggedIn = false;
         this.username = null;
+        this.isAdmin = false;
         this.router.navigate(['/login']);
       }
     });
   }
 
+  handleGetStarted(): void {
+    if (this.authService.isLoggedIn()) {
+      this.router.navigate(['/predictions']);
+    } else {
+      this.router.navigate(['/login']);
+    }
+  }
 }
