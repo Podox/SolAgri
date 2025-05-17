@@ -6,6 +6,10 @@
     <a *ngIf="!loggedIn" routerLink="/login">Login</a>
     <a *ngIf="!loggedIn" routerLink="/register">Register</a>
     <a *ngIf="loggedIn" routerLink="/predictions">predictions</a>
+    <a routerLink="/support" class="btn btn-outline-secondary">Support</a>
+    <a *ngIf="username === 'admin'" routerLink="/support/admin-support">Admin Support</a>
+
+
   </nav>
 
 

@@ -1,4 +1,6 @@
 <div class="container mt-5">
+
+  <a routerLink="/predict">Make your a prediction</a>
   <h2>Your Predictions</h2>
 
   <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
@@ -36,8 +38,8 @@
         <td>{{ p.explanation }}</td>
         <td>
           <a [routerLink]="['/advanced-predict']" [queryParams]="{ predictionId: p.id }" class="btn btn-sm btn-info">Update with Soil</a>
-          <a [routerLink]="['/feedback/add']" [queryParams]="{ id: p.id }" class="btn btn-sm btn-success">Add Feedback</a>
-          <a [routerLink]="['/feedback', p.id]" class="btn btn-sm btn-primary">View Feedback</a>
+          <a [routerLink]="['/feedback']" [queryParams]="{ id: p.id }" class="btn btn-sm btn-primary">View Feedback</a>
+
         </td>
       </tr>
       </tbody>

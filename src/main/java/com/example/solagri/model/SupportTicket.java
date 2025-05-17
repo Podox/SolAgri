@@ -1,5 +1,7 @@
 package com.example.solagri.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
@@ -24,6 +26,7 @@ public class SupportTicket {
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
+    @JsonManagedReference // avoid recursion
     private User user;
 
     // Constructors

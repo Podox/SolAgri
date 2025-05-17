@@ -10,11 +10,13 @@ export class PredictionService {
 
   constructor(private http: HttpClient) {}
 
-  createPrediction(data: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/predict`, data, {
+  createPrediction(data: any, soilType: string): Observable<any> {
+    const params = soilType ? `?soilType=${encodeURIComponent(soilType)}` : '';
+    return this.http.post(`${this.apiUrl}/predict${params}`, data, {
       withCredentials: true
     });
   }
+
   updatePredictionWithSoil(data: { predictionId: number; soilType: string }): Observable<any> {
     return this.http.post(`${this.apiUrl}/advanced-predict`, data, {
       withCredentials: true

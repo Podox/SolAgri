@@ -77,7 +77,6 @@ public class PredictionRestController {
         return ResponseEntity.ok(prediction);
     }
 
-    // ✅ Update an existing prediction with soil type (advanced)
     @PostMapping("/advanced-predict")
     public ResponseEntity<?> updatePredictionWithSoil(@RequestBody AdvancedPredictionInput input, HttpSession session) {
         User user = (User) session.getAttribute("user");
@@ -104,12 +103,20 @@ public class PredictionRestController {
         prediction.setSurfaceArea(response.getSurfaceArea());
         prediction.setCost(response.getCost());
 
-        AdvancedPrediction advancedPrediction = new AdvancedPrediction(input.getSoilType(), prediction);
-        advancedPredictionRepository.save(advancedPrediction);
-        prediction.setAdvancedPrediction(advancedPrediction);
+        AdvancedPrediction existingAdvanced = prediction.getAdvancedPrediction();
+        if (existingAdvanced != null) {
+            // ✅ Update existing object
+            existingAdvanced.setSoilType(input.getSoilType());
+            advancedPredictionRepository.save(existingAdvanced);
+        } else {
+            // ✅ First-time creation
+            AdvancedPrediction newAdvanced = new AdvancedPrediction(input.getSoilType(), prediction);
+            advancedPredictionRepository.save(newAdvanced);
+            prediction.setAdvancedPrediction(newAdvanced);
+        }
 
         predictionRepository.save(prediction);
-
         return ResponseEntity.ok(prediction);
     }
+
 }

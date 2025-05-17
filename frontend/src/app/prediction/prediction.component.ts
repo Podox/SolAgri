@@ -29,21 +29,25 @@ export class PredictionComponent {
       soilType: [''] // Optional
     });
   }
-
   onSubmit(): void {
     if (this.predictionForm.invalid) return;
 
     this.loading = true;
     this.error = null;
 
-    this.predictionService.createPrediction(this.predictionForm.value).subscribe({
+    const formData = this.predictionForm.value;
+    const soilType = formData.soilType;
+    delete formData.soilType; // ❌ remove it from the body
+
+    this.predictionService.createPrediction(formData, soilType).subscribe({
       next: () => {
         this.router.navigate(['/predictions']);
       },
-      error: (err: { error: string; }) => {
+      error: (err: { error: string }) => {
         this.error = err?.error || 'Something went wrong';
         this.loading = false;
       }
     });
   }
+
 }

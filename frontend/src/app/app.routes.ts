@@ -10,5 +10,11 @@ export const routes: Routes = [
   { path: 'predict', loadComponent: () => import('./prediction/prediction.component').then(m => m.PredictionComponent) },
   { path: 'advanced-predict', loadComponent: () => import('./advanced-prediction/advanced-prediction.component').then(m => m.AdvancedPredictionComponent) },
   { path: 'predictions', loadComponent: () => import('./predictions/predictions.component').then(m => m.PredictionsComponent) },
+  { path: 'feedback', loadComponent: () => import('./feedback/feedback.component').then(m => m.FeedbackComponent)},
+  { path: 'support', loadComponent: () => import('./support/support.component').then(m => m.SupportComponent)},
+  {
+    path: 'support/admin-support',
+    loadComponent: () => import('./support/admin-support/admin-support.component').then(m => m.AdminSupportComponent)
+  }
 
 ];
