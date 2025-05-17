@@ -2,11 +2,12 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../services/auth.service';
+import { NavbarComponent } from '../navbar/navbar.component';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, NavbarComponent],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
@@ -48,6 +49,13 @@ export class HomeComponent {
   handleGetStarted(): void {
     if (this.authService.isLoggedIn()) {
       this.router.navigate(['/predictions']);
+    } else {
+      this.router.navigate(['/login']);
+    }
+  }
+  handleCalculate(): void {
+    if (this.authService.isLoggedIn()) {
+      this.router.navigate(['/predict']);
     } else {
       this.router.navigate(['/login']);
     }

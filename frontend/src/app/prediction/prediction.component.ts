@@ -3,11 +3,12 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } 
 import { CommonModule } from '@angular/common';
 import { PredictionService } from '../services/prediction.service';
 import { Router } from '@angular/router';
+import { NavbarComponent } from '../navbar/navbar.component';
 
 @Component({
   selector: 'app-prediction',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FormsModule],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule,NavbarComponent],
   templateUrl: './prediction.component.html',
   styleUrls: ['./prediction.component.css']
 })
@@ -23,9 +24,9 @@ export class PredictionComponent {
   ) {
     this.predictionForm = this.fb.group({
       seed: ['', Validators.required],
-      landSurface: ['', [Validators.required, Validators.min(0.1)]],
-      waterDepth: ['', [Validators.required, Validators.min(0.1)]],
-      waterTravelingDistance: ['', [Validators.required, Validators.min(0.1)]],
+      landSurface: ['', [Validators.required, Validators.min(100)]],
+      waterDepth: ['', [Validators.required, Validators.min(0.3)]],
+      waterTravelingDistance: ['', [Validators.required, Validators.min(1)]],
       soilType: [''] // Optional
     });
   }

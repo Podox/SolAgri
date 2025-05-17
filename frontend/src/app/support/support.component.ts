@@ -4,11 +4,12 @@ import { SupportService } from '../services/support.service';
 import { AuthService } from '../services/auth.service';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
+import { NavbarComponent } from '../navbar/navbar.component';
 
 @Component({
   selector: 'app-support',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule,NavbarComponent],
   templateUrl: './support.component.html',
   styleUrls: ['./support.component.css']
 })

@@ -52,77 +52,10 @@
 </head>
 <body>
 <div class="min-h-screen flex flex-col">
-  <!-- Navbar -->
-  <header class="sticky top-0 z-50 w-full border-b bg-white">
-    <div class="container mx-auto px-4 md:px-6">
-      <div class="flex h-16 items-center justify-between">
-        <div class="flex items-center gap-2">
-          <a href="/" class="flex items-center">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6 text-green-600 mr-2">
-              <circle cx="12" cy="12" r="4"></circle>
-              <path d="M12 2v2"></path>
-              <path d="M12 20v2"></path>
-              <path d="m4.93 4.93 1.41 1.41"></path>
-              <path d="m17.66 17.66 1.41 1.41"></path>
-              <path d="M2 12h2"></path>
-              <path d="M20 12h2"></path>
-              <path d="m6.34 17.66-1.41 1.41"></path>
-              <path d="m19.07 4.93-1.41 1.41"></path>
-            </svg>
-            <span class="text-xl font-bold text-green-800">SolAgri</span>
-          </a>
-        </div>
-
-        <!-- Desktop Navigation -->
-        <nav class="hidden md:flex items-center gap-6">
-          <a href="/support" class="text-sm font-medium text-gray-700 hover:text-green-600 transition-colors">
-            Support
-          </a>
-          <a
-            *ngIf="isAdmin"
-            href="support/admin-support"
-            class="text-sm font-medium text-gray-700 hover:text-green-600 transition-colors"
-          >
-            adminSupport
-          </a>
-
-          <div class="flex items-center gap-2">
-            <!-- Show Login/Register if not logged in -->
-            <ng-container *ngIf="!loggedIn; else loggedInBlock">
-              <a routerLink="/login"
-                 class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 px-4 py-2">
-                Login
-              </a>
-              <a routerLink="/register"
-                 class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-green-600 hover:bg-green-700 text-white h-9 px-4 py-2">
-                Register
-              </a>
-            </ng-container>
-
-            <!-- Show Logout if logged in -->
-            <ng-template #loggedInBlock>
-              <button (click)="logout()"
-                      class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-red-600 hover:bg-red-700 text-white h-9 px-4 py-2">
-                Logout
-              </button>
-            </ng-template>
-          </div>
-          <!-- Demo controls - would be removed in production -->
-
-        </nav>
-
-        <!-- Mobile Menu Button -->
-        <button class="md:hidden inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground h-10 w-10 p-0">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6">
-            <line x1="4" x2="20" y1="12" y2="12"></line>
-            <line x1="4" x2="20" y1="6" y2="6"></line>
-            <line x1="4" x2="20" y1="18" y2="18"></line>
-          </svg>
-          <span class="sr-only">Toggle menu</span>
-        </button>
-      </div>
-    </div>
+  <header >
+    <app-navbar></app-navbar>
   </header>
+
 
   <!-- Hero Section -->
   <section class="py-16 md:py-24 bg-gradient-to-br from-green-50 to-blue-50">
@@ -266,9 +199,11 @@
     <div class="container mx-auto px-4 md:px-6 text-center">
       <h2 class="text-3xl md:text-4xl font-bold mb-4">Ready to Go Solar?</h2>
       <p class="text-xl mb-8">Start your journey towards sustainable farming today.</p>
-      <a href="/prediction" class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-white text-green-600 hover:bg-gray-100 h-11 px-8">
+      <button (click)="handleCalculate()"
+              class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-white text-green-600 hover:bg-gray-100 h-11 px-8">
         Calculate Your Needs
-      </a>
+      </button>
+
     </div>
   </section>
 </div>
